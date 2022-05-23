@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
-
-// data
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 
 // @Component decorator specifies 
 // the Angular metadata for the component.
@@ -23,11 +21,23 @@ export class HeroesComponent implements OnInit {
     this.selectedHero = hero
   }
 
-  heroes = HEROES;
+  heroes: Hero[] = [];
 
-  constructor() { }
+  getHeroes(): void {
+    this.heroes = this.heroService.getHeroes()
+  }
+
+  /** Service injection
+   * The parameter simultaneously defines a private heroService 
+   * property and identifies it as a HeroService injection site.
+   * When Angular creates a HeroesComponent, 
+   * the Dependency Injection system sets the heroService parameter 
+   * to the singleton instance of HeroService.
+   */
+  constructor(private heroService: HeroService) { }
 
   ngOnInit(): void {
+    this.getHeroes()
   }
 
 }

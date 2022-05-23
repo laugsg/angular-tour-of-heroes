@@ -212,6 +212,36 @@ You'll create a MessageService and inject it in two places.
 2. Inject in MessagesComponent, which displays that message
 
 
+### @Injectable() services
+This marks the class as one that participates in the dependency injection system. The [name.service.ts] class is going to provide an injectable service, and it can also have its own injected dependencies.
+
+**The @Injectable() decorator accepts a metadata object for the service, the same way the @Component()** decorator did for your component classes.
+
+You must make the Service available to the dependency injection system _before Angular can inject it into a Component_ by registering a provider. A provider is something that can create or deliver a service; in this case, it instantiates the Service class to provide the service.
+
+To make sure that the Service can provide the service, register it with the injector, which is the object that is responsible for choosing and injecting the provider where the application requires it.
+
+> By default, the Angular CLI command `ng generate service` registers a provider with the root injector for your service by including provider metadata, that is providedIn: 'root' in the @Injectable() decorator.
+
+**_When you provide the service at the root level, Angular creates a single, shared instance of the Service and injects into any class that asks for it._**
+
+Registering the provider in the @Injectable metadata also allows Angular to optimize an application by removing the service if it turns out not to be used after all.
+
+1. ng generate service [service-name]
+2. Import the mock data.
+3. Add a get method to return the mock data.
+4. Update Components
+   1. Add a private serviceParameter of type Service to the constructor.
+   2. Create a method to retrieve the heroes from the service.
+   3. Call it in ngOnInit()
+
+
+
+
+
+
+
+
 
 
 
