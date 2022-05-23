@@ -17,6 +17,12 @@ import { HEROES } from './mock-heroes';
   providedIn: 'root'
 })
 export class HeroService {
+  /**
+   * This is a typical "service-in-service" scenario: 
+   * MessageService is injected into the HeroService 
+   * which is injected into the HeroesComponent.
+   */
+  constructor(private messageService: MessageService) { }
 
   getHeroes(): Observable<Hero[]> {
     const heroes = of(HEROES);
@@ -24,10 +30,16 @@ export class HeroService {
     return heroes;
   }
 
-  /**
-   * This is a typical "service-in-service" scenario: 
-   * MessageService is injected into the HeroService 
-   * which is injected into the HeroesComponent.
+  /** getHero
+   * @returns {Observable<Hero[]>}
+   * @NOTE:
+   * For now, assume that a hero with the specified `id` always exists.
+   * Error handling will be added in the next step of the tutorial.
    */
-  constructor(private messageService: MessageService) { }
+  getHero(id:Number): Observable<Hero> {
+    const hero = HEROES.find(h => h.id === id)!;
+    this.messageService.add(`HeroService: fetched hero id=${id}`);
+    return of(hero)
+  }
+
 }

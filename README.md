@@ -6,6 +6,7 @@ Commands used:
 2. ng serve --open
 3. ng generate component [component-name]
 4. ng generate service [service-name]
+5. ng generate module app-routing --flat --module=app
 
 Built-in used:
 
@@ -162,11 +163,13 @@ Event binding lets you listen for and respond to user actions such as keystrokes
 Angular's class binding can add and remove a CSS class conditionally. Add `[class.some-css-class]="some-condition"` to the element you want to style.
 
 ## @input()
+
 Input decorator refers to _"Data to be injected into a Component"_. In React it would be like _"props"_ as `<el text={'pizza'}>`.
 
 This avoid change Component Class but only change its template (this Angular feature is called 'Property binding').
 
 ### Property binding
+
 Property binding helps to set values for properties of HTML elements or directives. Use property binding to do things such as toggle button functionality, set paths programmatically, and share values between components.
 
 ### Sharing data between child and parent directives and components.
@@ -178,31 +181,30 @@ Property binding helps to set values for properties of HTML elements or directiv
 To use @Input(), you must configure the parent and child.
 
 1. Configuring the child component
-    1. Import Input decorator
-    2. @Input() decorates the property
-    ```
-      import { Component, Input } from '@angular/core'
-      export class ItemDetailComponent {
-        @Input() chilProp = ''
-      }
-    ```
+   1. Import Input decorator
+   2. @Input() decorates the property
+   ```
+     import { Component, Input } from '@angular/core'
+     export class ItemDetailComponent {
+       @Input() chilProp = ''
+     }
+   ```
 
 <br />
 
 1. Configuring the parent component
-    1. Introduce the child component using the property binding ('[]') within the parent component template, providing to the Parent Class access to Child Class properties.
-    ```
-    <app-item-detail [chilProp]="parentProp"></app-item-detail>
-    ```
+   1. Introduce the child component using the property binding ('[]') within the parent component template, providing to the Parent Class access to Child Class properties.
+   ```
+   <app-item-detail [chilProp]="parentProp"></app-item-detail>
+   ```
 
 `[chilProp]="parentProp"` is a one way data binding from the parentProp property of the Parent Class to the chilProp property of the Child Class.
 
 Now when the user clicks an element in the list, the parentProp changes, then, the property binding updates chilProp and the Child Class displays the new data.
 
-
-
 ## Why services
-Services are a great way to share information among classes that don't know each other. 
+
+Services are a great way to share information among classes that don't know each other.
 
 You'll rely on Angular dependency injection to inject it into the parentComponent constructor.
 
@@ -211,8 +213,8 @@ You'll create a MessageService and inject it in two places.
 1. Inject in dataService, which uses the service to send a message
 2. Inject in MessagesComponent, which displays that message
 
-
 ### @Injectable() services
+
 This marks the class as one that participates in the dependency injection system. The [name.service.ts] class is going to provide an injectable service, and it can also have its own injected dependencies.
 
 **The @Injectable() decorator accepts a metadata object for the service, the same way the @Component()** decorator did for your component classes.
@@ -234,6 +236,70 @@ Registering the provider in the @Injectable metadata also allows Angular to opti
    1. Add a private serviceParameter of type Service to the constructor.
    2. Create a method to retrieve the heroes from the service.
    3. Call it in ngOnInit()
+
+### Service structure
+
+A service rely on their methods and properties as getters and setters, then it's instantiated by the constructor component that requires it as public or private, this enables within the component a property to host service's getters, setters and properties to access the service data.
+
+Simple example:
+
+```
+// message service
+export class MessageService {
+  messages: string[] = [];
+
+  add(message: string) {
+    this.messages.push(message)
+  }
+}
+
+// component 1
+import { MessageService } from '../message.service';
+export class ComponentOne {
+  getData(): Observable<Item[]> {
+    this.messageService.add('MessageService: fetched data');
+  }
+  constructor(private messageService: MessageService) { }
+}
+```
+
+## The AppRoutingModule
+
+In Angular, the best practice is to load and configure the router in a separate, top-level module that is dedicated to routing and imported by the root AppModule.
+
+By convention, the module class name is AppRoutingModule and it belongs in the app-routing.module.ts in the src/app folder.
+
+| PARAMETER                                          | DETAILS                                                             |
+| -------------------------------------------------- | ------------------------------------------------------------------- |
+| ng generate module app-routing --flat --module=app |
+| --flat                                             | Puts the file in src/app instead of its own folder.                 |
+| --module=app                                       | Tells the CLI to register it in the imports array of the AppModule. |
+
+
+### Routes
+
+It is where to tell the Router which view to display when a user clicks a link or pastes a URL into the browser address bar.
+
+A typical Angular Route has two properties:
+
+| PROPERTIES | DETAILS                                                                    |
+| ---------- | -------------------------------------------------------------------------- |
+| path       | A string that matches the URL in the browser address bar.                  |
+| component  | The component that the router should create when navigating to this route. |
+
+
+### RouterModule.forRoot()
+Adds the RouterModule to the AppRoutingModule imports array and configures it with the routes by calling RouterModule.forRoot().
+
+> The method is called `forRoot()` because you `configure the router at the application's root level`. The forRoot() method supplies the service providers and directives needed for routing, and performs the initial navigation based on the current browser URL.
+
+### Add RouterOutlet
+The `<router-outlet>` tells the router where to display routed views.
+
+### Add a navigation link (routerLink)
+A `routerLink` attribute is set a string that the router matches to any Component route.
+
+
 
 
 

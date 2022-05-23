@@ -18,10 +18,10 @@ export class HeroesComponent implements OnInit {
 
   // onSelect(): assigns the clicked hero from the template
   // to the component's selectedHero.
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
-  }
+  // onSelect(hero: Hero): void {
+  //   this.selectedHero = hero
+  //   this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
+  // }
 
   heroes: Hero[] = [];
 
