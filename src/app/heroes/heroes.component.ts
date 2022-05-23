@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
+import { MessageService } from '../message.service';
 
 // @Component decorator specifies 
 // the Angular metadata for the component.
@@ -19,6 +20,7 @@ export class HeroesComponent implements OnInit {
   // to the component's selectedHero.
   onSelect(hero: Hero): void {
     this.selectedHero = hero
+    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
   }
 
   heroes: Hero[] = [];
@@ -35,7 +37,7 @@ export class HeroesComponent implements OnInit {
    * the Dependency Injection system sets the heroService parameter 
    * to the singleton instance of HeroService.
    */
-  constructor(private heroService: HeroService) { }
+  constructor(private heroService: HeroService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.getHeroes()
